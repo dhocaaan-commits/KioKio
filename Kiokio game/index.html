@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>KioKio - Main, Kenal, Jadi Pintar!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage">
+  <div id="frame">
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+    <div class="blob blob4"></div>
+
+
+    <!-- TITLE SCREEN -->
+    <div class="screen active" id="screen-title">
+      <div class="wordmark">
+        <div class="wm-row">
+          <span class="letter-mascot k1">K<span class="eyes"><span class="eye"><span class="pupil"></span></span><span class="eye"><span class="pupil"></span></span></span></span><span class="letter-mascot i1">i<span class="eyes" style="top:2%"><span class="eye"><span class="pupil"></span></span><span class="eye"><span class="pupil"></span></span></span></span><span class="letter-mascot o1">o<span class="eyes" style="top:26%"><span class="eye"><span class="pupil"></span></span><span class="eye"><span class="pupil"></span></span></span></span>
+        </div>
+        <div class="wm-row">
+          <span class="letter-mascot k2">K<span class="eyes"><span class="eye"><span class="pupil"></span></span><span class="eye"><span class="pupil"></span></span></span></span><span class="letter-mascot i2">i<span class="eyes" style="top:2%"><span class="eye"><span class="pupil"></span></span><span class="eye"><span class="pupil"></span></span></span></span><span class="letter-mascot o2">o<span class="eyes" style="top:26%"><span class="eye"><span class="pupil"></span></span><span class="eye"><span class="pupil"></span></span></span></span>
+        </div>
+      </div>
+      <div class="slogan">"Main, Kenal, Jadi Pintar!" </div>
+      <button class="btn btn-primary" onclick="showIntro()">Mulai Main! </button>
+      <div class="voice-picker">
+        <label> Pilih Suara</label>
+        <select id="voiceSelect"></select>
+        <div class="row">
+          <button class="btn btn-small btn-secondary" style="margin-top:0" onclick="testVoice()">Coba Suara</button>
+          <button class="btn btn-small btn-secondary" style="margin-top:0" onclick="pickVoice(true)"> Muat Ulang</button>
+        </div>
+      </div>
+    </div>
+    <!-- INTRO SCREEN -->
+<div class="screen" id="screen-intro">
+
+  <div class="intro-character">
+    🐻
+  </div>
+
+  <div class="intro-title">
+    Kenalan Dulu Yuk!
+  </div>
+
+  <div class="intro-subtitle">
+    Sebelum bermain, kenalan dulu dengan KioKio 😊
+  </div>
+
+  <div class="intro-form">
+
+    <label for="playerName">
+      🧒 Namamu siapa?
+    </label>
+
+    <input
+      type="text"
+      id="playerName"
+      placeholder="Tulis namamu..."
+      maxlength="15"
+    >
+
+    <label>
+  🎂 Umur kamu berapa?
+</label>
+
+<div class="age-select" id="ageSelect">
+  <div class="age-display" id="ageDisplay">
+    <span>Pilih umur</span>
+    <span>▼</span>
+  </div>
+
+  <div class="age-popup" id="agePopup">
+    <div class="age-popup-title">
+      Pilih Umur
+    </div>
+
+    <button class="age-option" data-age="4">4</button>
+    <button class="age-option" data-age="5">5</button>
+    <button class="age-option" data-age="6">6</button>
+    <button class="age-option" data-age="7">7</button>
+    <button class="age-option" data-age="8">8</button>
+    <button class="age-option" data-age="9">9</button>
+    <button class="age-option" data-age="10">10</button>
+  </div>
+</div>
+
+    <button
+      class="btn btn-primary"
+      id="startIntroBtn"
+    >
+      🚀 AYO MULAI!
+    </button>
+
+  </div>
+
+</div>
+    <!-- GAME SCREEN -->
+    <div class="screen" id="screen-game">
+      <div class="topbar">
+
+  <div class="back-btn" onclick="goTitle()">←</div>
+
+  <div class="player-greeting">
+    👋 Hai,
+    <span id="playerNameDisplay">Teman</span>!
+  </div>
+
+  <div class="garden" id="garden"></div>
+
+  <div class="topbar-right">
+          <div class="lives" id="lives">❤❤❤</div>
+          <div class="score-badge"> <span id="score">0</span></div>
+        </div>
+      </div>
+      <div class="prompt" id="prompt">Cari gambar yang diawali huruf ini!</div>
+      <div class="target-wrap">
+        <div class="target-letter" id="targetLetter">A</div>
+        <div class="speaker" id="speakerBtn" onclick="speakCurrent()"></div>
+      </div>
+      <div class="options" id="options"></div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+    
+    <!-- COMPLETE SCREEN -->
+    <div class="screen" id="screen-complete">
+      <div class="complete-emoji"></div>
+      <div class="complete-title">Kamu Hebat!</div>
+      <div class="complete-sub">Taman huruf KioKio kamu penuh! </div>
+      <div class="final-score"> Skor: <span id="finalScoreWin">0</span></div>
+      <button class="btn btn-primary" onclick="startGame()">Main Lagi</button>
+      <button class="btn btn-secondary" onclick="goTitle()">Kembali</button>
+    </div>
+
+     <!-- GAME OVER SCREEN -->
+    <div class="screen" id="screen-gameover">
+      <div class="complete-emoji"></div>
+      <div class="complete-title">Yuk, Coba Lagi!</div>
+      <div class="complete-sub">Kesempatan kamu habis, tapi hebat sudah mencoba! </div>
+      <div class="final-score"> Skor: <span id="finalScoreLose">0</span></div>
+      <button class="btn btn-primary" onclick="startGame()">Main Lagi</button>
+      <button class="btn btn-secondary" onclick="goTitle()">Kembali</button>
+    </div>
+  </div>
+</div>
+<script src="script.js"></script>
+<!-- APRESIASI -->
+<div id="appreciation" class="appreciation">
+  <div class="appreciation-card">
+    <div id="appreciationEmoji" class="appreciation-emoji">🎉</div>
+    <div id="appreciationTitle" class="appreciation-title">
+      Betul!
+    </div>
+    <div id="appreciationText" class="appreciation-text">
+      Jawaban kamu benar!
+    </div>
+  </div>
+</div>
+</body>
+</html
