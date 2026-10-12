@@ -1,0 +1,781 @@
+:root{
+    --green:#3FB871;
+    --green-dark:#1f7a45;
+    --coral:#EF5C43;
+    --coral-dark:#a83a27;
+    --blue:#2E6DA4;
+    --blue-dark:#1a4d7a;
+    --pink:#F6A8C4;
+    --cream:#FCF4D6;
+    --mint:#B7EFD4;
+    --ink:#20241f;
+    --paper:#FFFDF7;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    font-family:'Fredoka',sans-serif;
+    color:var(--ink);
+    background:var(--mint);
+    overflow:hidden;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+}
+  /* ====== SISTEM UKURAN KONSISTEN (mobile & laptop sama persis) ======
+     Semua ukuran di bawah ini didesain dalam "kanvas" tetap 430x900px.
+     JS di bagian bawah akan meng-scale seluruh #frame agar pas di layar
+     apa pun (HP kecil, HP besar, tablet, laptop) TANPA mengubah proporsi
+     -- jadi tampilannya identik di semua device, cuma beda besar/kecil
+     mengikuti layar, bukan berubah tata letak. */
+  /* =========================================================
+   BACKGROUND UTAMA KIOKIO
+   Beranda + Intro = colorful
+========================================================= */
+
+#stage{
+    position:fixed;
+    inset:0;
+    width:100vw;
+    height:100vh;
+
+    background:linear-gradient(
+        135deg,
+        #FFB3BA 0%,
+        #FFDFBA 20%,
+        #FFFFBA 40%,
+        #BAFFC9 60%,
+        #BAE1FF 80%,
+        #D7BAFF 100%
+    );
+
+    overflow:hidden;
+}
+/* =========================================================
+   BACKGROUND KHUSUS HALAMAN GAME
+   Foto hanya muncul ketika bermain
+========================================================= */
+
+#screen-game{
+    background-image:url("backgrounds/background.jpg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+}
+
+  #frame{
+    position:absolute;
+    top:50%;
+    left:50%;
+
+    width:430px;
+    height:900px;
+
+    transform-origin:center center;
+    overflow:hidden;
+}
+  /* blob background */
+  .blob{position:absolute;border-radius:42% 58% 61% 39% / 45% 41% 59% 55%;opacity:.9;}
+  .blob1{width:170px;height:170px;top:-40px;left:-35px;background:var(--green);}
+  .blob2{width:140px;height:140px;top:-25px;right:-40px;background:var(--blue);border-radius:60% 40% 45% 55% / 55% 60% 40% 45%;}
+  .blob3{width:150px;height:150px;bottom:-40px;left:-25px;background:var(--coral);opacity:.55;border-radius:50% 50% 65% 35% / 40% 55% 45% 60%;}
+  .blob4{width:145px;height:145px;bottom:-35px;right:-25px;background:var(--pink);border-radius:55% 45% 40% 60% / 60% 45% 55% 40%;}
+  .screen{
+    position:relative;z-index:2;
+    width:100%;height:100%;
+    display:none;
+    flex-direction:column;align-items:center;justify-content:center;
+    padding:30px 22px;
+  }
+  .screen.active{display:flex;}
+  /* ---------- Title screen ---------- */
+  .wordmark{display:flex;justify-content:center;gap:2px;margin-bottom:4px;}
+  .wm-row{display:flex;}
+  .letter-mascot{
+    position:relative;
+    font-family:'Baloo 2',sans-serif;
+    font-weight:800;
+    font-size:120px;
+    line-height:1;
+    -webkit-text-stroke:5px var(--ink);
+    padding:0 2px;
+  }
+  .letter-mascot .eyes{
+    position:absolute;top:22%;left:50%;transform:translateX(-50%);
+    display:flex;gap:6px;
+  }
+  .eye{
+    width:16px;height:16px;
+    background:var(--paper);border:2.5px solid var(--ink);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .pupil{width:45%;height:45%;background:var(--ink);border-radius:50%;animation:look 3.5s infinite;}
+  @keyframes look{0%,40%{transform:translate(0,0);}45%{transform:translate(-2px,1px);}55%{transform:translate(2px,1px);}90%,100%{transform:translate(0,0);}}
+  .k1{color:var(--green);} .i1{color:var(--coral);} .o1{color:var(--blue);}
+  .k2{color:var(--green);} .i2{color:var(--coral);} .o2{color:var(--blue);}
+
+  .title-word{
+    font-family:'Baloo 2',sans-serif;font-weight:800;
+    font-size:100px;
+    color:var(--coral);
+    -webkit-text-stroke:1.5px var(--ink);
+    letter-spacing:1px;
+    margin-top:6px;
+  }
+  .slogan{
+    font-size:29px;
+    font-weight:800;color:var(--blue-dark);
+    margin:14px 0 22px;
+    text-align:center;
+  }
+  .btn{
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    border:none;border-radius:999px;
+    padding:15px 34px;
+    font-size:19px;
+    cursor:pointer;
+    box-shadow:0 6px 0 rgba(0,0,0,.18);
+    transition:transform .08s ease;
+  }
+  .btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.18);}
+  .btn-primary{background:var(--coral);color:#fff;}
+  .btn-secondary{background:#fff;color:var(--blue-dark);margin-top:12px;}
+  .btn-small{padding:9px 18px;font-size:13px;box-shadow:0 4px 0 rgba(0,0,0,.18);}
+  .btn-small:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.18);}
+  /* pemilih suara di title screen */
+  .voice-picker{
+    margin-top:20px;
+    background:#fff;border:3px solid var(--ink);border-radius:20px;
+    padding:12px 14px;width:100%;max-width:300px;
+    display:flex;flex-direction:column;gap:8px;align-items:stretch;
+  }
+  .voice-picker label{font-size:13px;font-weight:700;color:var(--blue-dark);text-align:center;}
+  .voice-picker select{
+    font-family:'Fredoka',sans-serif;font-size:13px;
+    border:2px solid var(--ink);border-radius:12px;
+    padding:8px 10px;background:var(--cream);color:var(--ink);
+  }
+  .voice-picker .row{display:flex;gap:8px;}
+  .voice-picker .row .btn-small{flex:1;}
+  /* ---------- Game screen ---------- */
+  .topbar{
+    position:absolute;top:0;left:0;right:0;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 18px;z-index:3;
+  }
+  .back-btn{
+    width:40px;height:40px;border-radius:50%;
+    background:#fff;border:3px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;cursor:pointer;
+  }
+  .garden{
+    background:#fff;border:3px solid var(--ink);border-radius:999px;
+    padding:5px 14px;font-size:17px;letter-spacing:2px;min-width:100px;text-align:center;
+  }
+  .topbar-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+  .lives{
+    background:#fff;border:3px solid var(--ink);border-radius:999px;
+    padding:3px 10px;font-size:14px;letter-spacing:3px;
+  }
+  .score-badge{
+    background:var(--cream);border:3px solid var(--ink);border-radius:999px;
+    padding:3px 12px;font-size:13px;font-weight:700;color:var(--coral-dark);
+    display:flex;align-items:center;gap:4px;
+  }
+  .prompt{
+    font-size:16px;font-weight:600;
+    text-align:center;color:var(--blue-dark);margin-bottom:10px;
+  }
+  .target-wrap{
+    display:flex;align-items:center;gap:14px;margin-bottom:22px;
+  }
+  .target-letter{
+    width:100px;height:100px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Baloo 2',sans-serif;font-weight:800;
+    font-size:52px;color:#fff;
+    border:4px solid var(--ink);
+    animation:bounce 1.6s ease-in-out infinite;
+  }
+  @keyframes bounce{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-8px) rotate(2deg);}}
+  .speaker{
+    width:48px;height:48px;border-radius:50%;
+    background:var(--cream);border:3px solid var(--ink);
+    font-size:20px;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+  }
+  .options{
+    display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+    max-width:390px;
+  }
+
+  .card{
+  width:120px;
+  height:100px;
+  border-radius:26px;
+  background:#fff;
+  border:4px solid var(--ink);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:70px;
+  cursor:pointer;
+  box-shadow:0 6px 0 rgba(0,0,0,.15);
+  transition:transform .1s ease;
+}
+.card{
+  width:120px;
+  height:110px;
+  border-radius:35px;
+  background:#FFFDF7;
+  border:4px solid var(--ink);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  box-shadow:0 7px 0 rgba(0,0,0,.15);
+  transition:transform .12s ease;
+  overflow:hidden;
+  position:relative;
+}
+
+.card svg{
+  width:85px;
+  height:85px;
+  transition:transform .15s ease;
+}
+.card img{
+  width:85px;
+  height:85px;
+  object-fit:contain;
+  display:block;
+  transition:transform .15s ease;
+}
+
+.card:hover img{
+  transform:scale(1.08);
+}
+
+.card:hover svg{
+  transform:scale(1.08) rotate(-3deg);
+}
+
+.card:active{
+  transform:scale(.92);
+}
+
+.card.correct{
+  animation:pop .5s ease;
+  background:#C9F7DF;
+  border-color:var(--green-dark);
+}
+
+.card.wrong{
+  animation:shake .4s ease;
+  background:#FFD9D1;
+  border-color:var(--coral-dark);
+}
+  .card:active{transform:scale(.94);}
+  .card.correct{animation:pop .5s ease;background:var(--mint);border-color:var(--green-dark);}
+  .card.wrong{animation:shake .4s ease;background:#ffd9d1;border-color:var(--coral-dark);}
+  @keyframes pop{0%{transform:scale(1);}40%{transform:scale(1.18);}100%{transform:scale(1);}}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+  .feedback{
+    height:28px;margin-top:14px;
+    font-weight:700;font-size:15px;
+    color:var(--green-dark);
+    text-align:center;
+  }
+  /* ---------- Complete / Game over screen ---------- */
+  .complete-emoji{font-size:76px;animation:bounce 1.4s ease-in-out infinite;}
+  .complete-title{
+    font-family:'Baloo 2',sans-serif;font-weight:800;
+    font-size:28px;color:var(--coral);
+    -webkit-text-stroke:1.2px var(--ink);
+    margin:8px 0;text-align:center;
+  }
+  .complete-sub{font-size:14px;font-weight:600;color:var(--blue-dark);margin-bottom:18px;text-align:center;}
+  .final-score{
+    background:#fff;border:3px solid var(--ink);border-radius:999px;
+    padding:8px 20px;font-size:17px;font-weight:700;
+    color:var(--coral-dark);margin:4px 0 18px;
+  }
+  /* confetti */
+  .confetti{position:absolute;top:-10px;border-radius:2px;z-index:10;animation:fall linear forwards;}
+  @keyframes fall{to{transform:translateY(920px) rotate(360deg);opacity:.9;}}
+
+ /* =========================================================
+   KIOKIO - INTRO / KENALAN PEMAIN
+   TAMBAHAN SAJA
+========================================================= */
+
+#screen-intro{
+    padding:30px 22px;
+}
+
+
+/* Karakter KioKio */
+
+.intro-character{
+    width:100px;
+    height:100px;
+
+    background:#fff;
+
+    border:4px solid var(--ink);
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:58px;
+
+    margin-bottom:12px;
+
+    box-shadow:
+        0 6px 0 rgba(0,0,0,.15);
+
+    animation:
+        bounce 1.5s ease-in-out infinite;
+}
+
+
+/* Judul */
+
+.intro-title{
+    font-family:'Baloo 2',sans-serif;
+
+    font-size:34px;
+
+    font-weight:800;
+
+    color:var(--coral);
+
+    -webkit-text-stroke:
+        1px var(--ink);
+
+    text-align:center;
+
+    margin:
+        4px 0;
+}
+
+
+/* Deskripsi */
+
+.intro-subtitle{
+    font-size:15px;
+
+    font-weight:600;
+
+    color:var(--blue-dark);
+
+    text-align:center;
+
+    max-width:300px;
+
+    margin:
+        0 0 20px;
+}
+
+
+/* Kotak form */
+
+.intro-form{
+    width:100%;
+
+    max-width:320px;
+
+    background:
+        rgba(255,255,255,.94);
+
+    border:
+        4px solid var(--ink);
+
+    border-radius:28px;
+
+    padding:20px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:9px;
+
+    box-shadow:
+        0 8px 0 rgba(0,0,0,.15);
+}
+
+
+/* Label */
+
+.intro-form label{
+    font-size:14px;
+
+    font-weight:800;
+
+    color:var(--blue-dark);
+
+    margin-top:4px;
+}
+
+
+/* Input nama */
+
+.intro-form input{
+    width:100%;
+
+    padding:
+        13px 15px;
+
+    border:
+        3px solid var(--ink);
+
+    border-radius:18px;
+
+    font-family:
+        'Fredoka',
+        sans-serif;
+
+    font-size:16px;
+
+    background:
+        var(--cream);
+
+    color:
+        var(--ink);
+
+    outline:none;
+
+    user-select:text;
+}
+
+
+.intro-form input:focus{
+    border-color:
+        var(--coral);
+
+    background:#fff;
+}
+
+
+/* Tombol umur */
+
+.age-buttons{
+    display:flex;
+
+    gap:10px;
+}
+
+
+.age-btn{
+    flex:1;
+
+    padding:
+        12px 8px;
+
+    border:
+        3px solid var(--ink);
+
+    border-radius:18px;
+
+    background:#fff;
+
+    font-family:
+        'Fredoka',
+        sans-serif;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 4px 0 rgba(0,0,0,.15);
+
+    transition:
+        transform .1s ease,
+        background .1s ease;
+}
+
+
+/* Umur yang dipilih */
+
+.age-btn.selected{
+    background:
+        var(--mint);
+
+    border-color:
+        var(--green-dark);
+
+    transform:
+        translateY(2px);
+
+    box-shadow:
+        0 2px 0 rgba(0,0,0,.15);
+}
+
+
+.age-btn:active{
+    transform:
+        translateY(3px);
+}
+
+
+/* Tombol Ayo Mulai */
+
+#startIntroBtn{
+    width:100%;
+
+    margin-top:10px;
+}
+
+
+/* =========================================================
+   SAPAAN NAMA DI GAME
+========================================================= */
+
+.player-greeting{
+    position:absolute;
+
+    top:70px;
+    left:20px;
+
+    background:#fff;
+
+    border:
+        3px solid var(--ink);
+
+    border-radius:18px;
+
+    padding:
+        7px 12px;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    color:var(--ink);
+
+    box-shadow:
+        0 4px 0 rgba(0,0,0,.12);
+
+    z-index:4;
+}
+
+
+#playerNameDisplay{
+    color:
+        var(--coral);
+}
+
+
+/* =========================================================
+   RESPONSIVE KECIL
+   Tidak mengubah layout utama
+========================================================= */
+
+@media(max-height:700px){
+
+    .intro-character{
+        width:80px;
+        height:80px;
+        font-size:46px;
+    }
+
+    .intro-title{
+        font-size:29px;
+    }
+
+    .intro-subtitle{
+        margin-bottom:12px;
+    }
+
+    .intro-form{
+        padding:15px;
+    }
+
+}
+
+.age-select{
+    position:relative;
+    width:100%;
+    margin-bottom:20px;
+}
+
+.age-display{
+    width:100%;
+    min-height:58px;
+    box-sizing:border-box;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 18px;
+
+    background:white;
+    border:3px solid #eee;
+    border-radius:18px;
+
+    font-size:18px;
+    font-weight:700;
+    color:#777;
+
+    cursor:pointer;
+    transition:.2s ease;
+}
+
+.age-display:active{
+    transform:scale(.97);
+}
+
+.age-popup{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:68px;
+
+    display:none;
+
+    padding:12px;
+
+    background:white;
+    border-radius:22px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+    z-index:100;
+}
+
+.age-popup.show{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:10px;
+}
+
+.age-popup-title{
+    grid-column:1 / -1;
+
+    text-align:center;
+    font-size:18px;
+    font-weight:800;
+
+    padding:8px;
+    color:#555;
+}
+
+.age-option{
+    border:none;
+    border-radius:15px;
+
+    padding:13px 5px;
+
+    background:#f5f5f5;
+
+    font-size:20px;
+    font-weight:800;
+
+    cursor:pointer;
+
+    transition:.15s ease;
+}
+
+.age-option:hover{
+    transform:scale(1.05);
+}
+
+.age-option:active{
+    transform:scale(.92);
+}
+
+.age-option.selected{
+    background:#ffd85c;
+    color:#fff;
+}
+/* =========================================================
+   APRESIASI JAWABAN
+========================================================= */
+
+.appreciation {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.appreciation.show {
+  display: flex;
+}
+
+.appreciation-card {
+  min-width: 280px;
+  max-width: 350px;
+  padding: 28px 25px;
+  border-radius: 30px;
+  text-align: center;
+  background: white;
+  box-shadow: 0 15px 40px rgba(0,0,0,.2);
+  animation: appreciationPop .45s ease;
+}
+
+.appreciation-emoji {
+  font-size: 70px;
+  margin-bottom: 5px;
+  animation: appreciationBounce .7s ease;
+}
+
+.appreciation-title {
+  font-family: "Baloo 2", cursive;
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.appreciation-text {
+  font-family: "Fredoka", sans-serif;
+  font-size: 18px;
+  margin-top: 5px;
+}
+
+/* Animasi muncul */
+
+@keyframes appreciationPop {
+  0% {
+    transform: scale(.5);
+    opacity: 0;
+  }
+
+  70% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes appreciationBounce {
+  0% {
+    transform: translateY(-25px) scale(.7);
+  }
+
+  50% {
+    transform: translateY(5px) scale(1.1);
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
